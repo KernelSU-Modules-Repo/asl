@@ -16,7 +16,7 @@ readme = "https://github.com/KernelSU-Modules-Repo/blob/main/README.md"
 readme_file = "README.md"
 changelog = "https://github.com/KernelSU-Modules-Repo/blob/main/CHANGELOG.md"
 changelog_file = "CHANGELOG.md"
-screenshots = []
+screenshots = ["Screenshot_2025-12-08-01-18-25-97_84d3000e3f4017145260f7618db1d683.jpg"]
 categories = ["tools"]
 keywords = [
     "ka",
