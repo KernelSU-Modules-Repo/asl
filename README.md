@@ -2,6 +2,8 @@
 
 this is a fork from [asl](https://github.com/RuriOSS/asl)
 
+![screenshot](Screenshot_2025-12-08-01-18-25-97_84d3000e3f4017145260f7618db1d683.jpg)
+
 
 # How to use?
 
