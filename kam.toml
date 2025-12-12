@@ -1,8 +1,8 @@
 [prop]
 id = "asl"
 name = "AndroidSubSystem4Linux"
-version = "1.0.0"
-versionCode = 1765549786922
+version = "1.0.1"
+versionCode = 1765554822025
 author = "LIghtJUNction"
 description = "Run GUN/Linux on android , powered by rurima & build-system: kam."
 updateJson = "https://github.com/KernelSU-Modules-Repo/releases/latest/download/asl.zip"
@@ -42,8 +42,7 @@ max_num = 0
 min_api = 21
 max_api = 35
 verified = false
-features = [
-]
+features = []
 
 [mmrl.repo.note]
 title = ""
