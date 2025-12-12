@@ -35,6 +35,11 @@ dist/id.zip
 kam build -r
 
 
+# action secrets 
+
+KAM_PRIVATE_KEY
+
+- ksu+developer-private-key.
 
 # Kam Build Hooks
 
