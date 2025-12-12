@@ -1,0 +1,19 @@
+{
+  "additionalAuthors": [
+    {
+      "name": "LIghtJUNction",
+      "type": "add"
+    },
+    {
+      "name": "Moe-hacker",
+      "type": "add"
+    },
+    {
+      "name": "Lin1328",
+      "type": "add"
+    }
+  ],
+  "metamodule": false,
+  "sourceUrl": "https://github.com/KernelSU-Modules-Repo/asl",
+  "summary": "Run GUN/Linux on android , powered by rurima & build-system: kam."
+}

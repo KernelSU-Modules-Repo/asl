@@ -1,0 +1,23 @@
+# 如果你想自定义
+# 欢迎
+# Feel free to customize this file.
+
+fastfetch || echo "是否忘记了执行 setup 命令？/ Did you forget to execute the setup command?"
+
+rurima -v
+
+echo "help: rurima --help"
+echo "exit: exit"
+
+echo "alias"
+echo "cls: clear"
+echo "pull: rurima pull (rurima docker pull)"
+echo "ota: rurima ota"
+echo "rdocker: rurima docker"
+echo "bak rurima backup"
+echo "unpack: rurima unpack"
+echo "dep: rurima dep"
+
+echo "Press the Tab key to complete."
+
+echo "zimfw: zim framework cli."

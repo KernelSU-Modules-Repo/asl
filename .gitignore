@@ -1,0 +1,12 @@
+dist
+target
+
+.env
+
+node_modules
+
+templates
+
+test
+
+
