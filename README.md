@@ -42,6 +42,13 @@ dist/id.zip
 
 - kam verify *zip --key my-pub-key.pem
 
+-----BEGIN PUBLIC KEY-----
+MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAEYeQgxFckNt9d19zqNjiJJvL+inPJXPdK
+K20ZjQBmNuLcnWe7dwYoKVfkVpMlqgF+gN1ADDzlRktiC83c4V7Zl/BT/AEVxRcA
+F5Pi+iJLXNDSxSpGCIxb8ixY7BP/KJo8
+-----END PUBLIC KEY-----
+
+[check](https://github.com/KernelSU-Modules-Repo/developers/issues/11)
 
 # How to release
 
