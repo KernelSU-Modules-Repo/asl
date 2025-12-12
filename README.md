@@ -3,34 +3,6 @@
 this is a fork from [asl](https://github.com/RuriOSS/asl)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Kam Build Hooks
 
 Hooks allow you to run custom scripts at different stages of the build process. Kam provides a flexible hook system with shared utilities and environment variables.
