@@ -1,6 +1,39 @@
-# WHAT is this?
+# What is this?
 
 this is a fork from [asl](https://github.com/RuriOSS/asl)
+
+
+# How to build
+
+- cargo install kam
+
+- cd asl
+
+- kam build
+
+output here：
+
+dist/id.zip
+
+
+# how to sign？
+
+- kam secret import main /path/to/xxx.pem
+
+- kam sign /path/to/module.zip
+
+
+# how to verify？
+
+- download *zip *sig
+
+- kam verify *zip --key my-pub-key.pem
+
+
+# how to release
+
+kam build -r
+
 
 
 # Kam Build Hooks
