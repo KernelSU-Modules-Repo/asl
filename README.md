@@ -3,6 +3,19 @@
 this is a fork from [asl](https://github.com/RuriOSS/asl)
 
 
+# How to use?
+
+- download termux 
+
+- su
+
+- rurima
+
+- dep 
+
+- help
+
+
 # How to build
 
 - cargo install kam
@@ -16,30 +29,31 @@ output here：
 dist/id.zip
 
 
-# how to sign？
+# How to sign？
 
 - kam secret import main /path/to/xxx.pem
 
 - kam sign /path/to/module.zip
 
 
-# how to verify？
+# How to verify？
 
 - download *zip *sig
 
 - kam verify *zip --key my-pub-key.pem
 
 
-# how to release
+# How to release
 
 kam build -r
 
 
-# action secrets 
+# Action secrets 
 
 KAM_PRIVATE_KEY
 
 - ksu+developer-private-key.
+
 
 # Kam Build Hooks
 
