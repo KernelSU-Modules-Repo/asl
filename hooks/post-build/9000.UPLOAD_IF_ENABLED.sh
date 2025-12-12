@@ -73,15 +73,11 @@ else
 fi
 
 # Upload files from DIST to the release (clobber existing)
-if [ -d "$DIST" ]; then
+if [ -d "$DIST" ] && [ "$(ls -A "$DIST")" ]; then
     log_info "Uploading assets from $DIST to release $TAG"
-    for f in "$DIST"/*; do
-        [ -f "$f" ] || continue
-        log_info "Uploading: $f"
-        gh release upload "$TAG" "$f" --clobber || log_warn "Failed to upload: $f"
-    done
+    gh release upload "$TAG" "$DIST"/* --clobber || log_warn "Failed to upload assets"
 else
-    log_warn "Dist directory not found: $DIST"
+    log_warn "Dist directory not found or empty: $DIST"
 fi
 
 log_success "Upload step finished"
