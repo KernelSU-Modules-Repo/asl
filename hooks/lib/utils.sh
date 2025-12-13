@@ -257,6 +257,29 @@ ci_install() {
     return 1
 }
 
+require_command_or_ci_install() {
+    cmd="$1"
+    msg="$2"
+
+    # If the command already exists, we are done
+    if has_command "$cmd"; then
+        return 0
+    fi
+
+    # If running in CI, attempt to install using the available package manager(s).
+    if is_ci; then
+        log_info "$cmd not found — attempting CI install"
+        if ci_install "$cmd"; then
+            log_success "$cmd installed in CI"
+            return 0
+        fi
+        log_warn "ci_install failed for $cmd"
+    fi
+
+    # Fall back to the original behavior (and exit) if the command is still not present.
+    require_command "$cmd" "$msg"
+}
+
 ui_print() {
     printf "  ${NC}• %s${NC}\n" "$1"
 }

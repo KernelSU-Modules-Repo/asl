@@ -3,7 +3,7 @@
 . "$KAM_HOOKS_ROOT/lib/utils.sh"
 
 require_command which "which not found"
-require_command zsh "zsh not found" || ci_install zsh
+require_command_or_ci_install zsh "zsh not found"
 
 
 export HOME=$KAM_MODULE_ROOT
