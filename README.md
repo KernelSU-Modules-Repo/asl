@@ -70,26 +70,7 @@ example
 - Keep secrets secure — do not commit private keys to the repository.
 
 ---
-
-Table of Contents | 目录
-- [Quick start / 快速开始](#quick-start--快速开始)
-  - [Download & install / 下载与安装](#download--install--下载与安装)
-  - [Build / 构建](#build--构建)
-  - [Sign / 签名](#sign--签名)
-  - [Verify / 验证](#verify--验证)
-  - [Release / 发布](#release--发布)
-  - [Action secrets / GitHub Actions（CI）](#action-secrets--github-actionsci)
-- [Overview / 概述](#overview--概述)
-- [Why / 返回：为什么使用钩子](#why--为什么使用钩子)
-- [Naming convention / 命名约定](#naming-convention--命名约定)
-- [Built-in hooks / 内置钩子](#built-in-hooks--内置钩子)
-- [Execution behavior / 执行行为](#execution-behavior--执行行为)
-- [Environment variables / 环境变量](#environment-variables--环境变量)
-- [Examples / 示例](#examples--示例)
-- [Template variables & precedence / 模板变量与优先级](#template-variables--precedence--模板变量与优先级)
-- [Troubleshooting / 常见问题](#troubleshooting--常见问题)
-- [Contributing / 贡献](#contributing--贡献)
-- [Licensing / 许可与引用](#licensing--许可与引用)
+# ![Screenshot]()
 
 ---
 
