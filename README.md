@@ -71,8 +71,9 @@ example
 ## ##### ## ##### ### #### ###
 ## ## ### ##### ## #### ######
 #### ######## ####### #### ###
+# It may seem like there's no pattern, but there is actually a certain pattern.
 ##############################
-
+# The following content is for reference only.
 
 # Kam build system
 
