@@ -59,4 +59,3 @@ zmodule zsh-users/zsh-autosuggestions
 zmodule romkatv/powerlevel10k
 
 # }}} End configuration added by Zim Framework install
-

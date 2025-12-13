@@ -1,0 +1,121 @@
+# .gitignore for src/asl
+# - Keep tracked repo files (like .zim modules tracked in the repo)
+# - Ignore local, ephemeral, and environment-specific files like shell history, caches, editor temp files, and local node/python envs.
+
+# --------------------------------------------------
+# Zsh / Zim (do not ignore top-level .zim if tracked)
+# --------------------------------------------------
+# Shell history
+.zhistory
+.zsh_history
+
+# zsh completion dumps & caches
+.zcompdump*
+.zsh-compdump*
+
+# zsh / zim runtime/cache directories inside .zim (ignore ephemeral cache only)
+# (Do not ignore `.zim/` root if you intentionally check it into the repo)
+.zim/cache/
+.zim/objects/
+.zim/state/
+
+# often-used local zsh session files
+.zsh_sessions
+
+# --------------------------------------------------
+# Editors / IDEs
+# --------------------------------------------------
+# Vim / Vi swap, backup
+*~
+*.swp
+*.swo
+*.swn
+
+# VSCode / JetBrains / Sublime
+.vscode/
+.idea/
+*.sublime-*
+*.code-workspace
+
+# Emacs
+*~
+.#*
+
+# --------------------------------------------------
+# OS artifacts
+# --------------------------------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# --------------------------------------------------
+# Build / Package / Node / Python / logs
+# --------------------------------------------------
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+.venv/
+.env
+.env.local
+
+# Build outputs and caches
+dist/
+build/
+out/
+tmp/
+tmp-*/
+
+# General logs
+*.log
+*.log.*
+npm-debug.log
+
+# archives / backup
+*.zip
+*.tar.gz
+*.tar
+*.tgz
+*.bak
+*.old
+
+# --------------------------------------------------
+# Misc / IDE / system files
+# --------------------------------------------------
+*.sw?
+*.swo
+*.swp
+*~.nib
+*.class
+*.jar
+
+# Editor sessions / history
+.session
+.session.lock
+
+# local caches & system-specific
+.cache/
+tmp/
+.local/
+
+# --------------------------------------------------
+# Notes
+# - Avoid ignoring top-level repository directories that are intentionally part of the source (e.g. .zim/ if tracked).
+# - If there are additional local files/paths frequently created by your dev environment
+#   (e.g. `src/asl/.local/bin/*`), add them here if they shouldn't be tracked.
+# --------------------------------------------------
