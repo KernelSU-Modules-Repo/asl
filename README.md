@@ -16,16 +16,17 @@ Quick start / 快速开始
 
 ### Download & install / 下载与安装
 - Download releases: https://github.com/KernelSU-Modules-Repo/asl/releases  
-- Example install (with `rurima`):
-  - `rurima install https://github.com/KernelSU-Modules-Repo/asl/releases/latest/download/asl.zip`
-- Termux (example):
-  1. Install Termux (F-Droid recommended).
-  2. On rooted devices: `su` (switch to root).
-  3. Install module: `rurima install /path/to/asl.zip` or `rurima install asl`.
-- Or use other managers (Magisk / KernelSU) or your device-specific method.
 
-示例（Termux）：
-- 下载 Release 并通过 `rurima` 或设备管理器安装模块。
+- download termux
+
+- su
+
+- rurima
+
+- dep # check dependencies
+
+- pull # pull image
+
 
 ### Build / 构建
 - Install the Kam CLI (if needed):
