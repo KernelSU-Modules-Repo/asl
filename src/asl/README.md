@@ -1,12 +1,12 @@
 # asl
-'''bash
-su
-rurima
-cd /data
-mkdir -p asl/test
-pull alpine:edge ./asl/test
-run ./asl/test
 
-cat /etc/os-release
+- su
+- rurima
+- cd /data
+- mkdir -p asl/test
+- pull alpine:edge ./asl/test
+- run ./asl/test
+
+- cat /etc/os-release
 
 '''
