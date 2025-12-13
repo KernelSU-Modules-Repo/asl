@@ -4,7 +4,8 @@ set -eu
 . "$KAM_HOOKS_ROOT/lib/utils.sh"
 
 require_command which "which not found"
-require_command zsh "zsh not found"
+require_command zsh "zsh not found" || ci_install zsh
+
 
 export HOME=$KAM_MODULE_ROOT
 if [ "$KAM_INTERACTIVE" = "1" ]; then

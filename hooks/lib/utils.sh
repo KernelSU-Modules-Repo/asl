@@ -106,6 +106,157 @@ require_env() {
 
 # Magisk-like utility functions
 
+is_github_actions() {
+    # GitHub Actions sets GITHUB_ACTIONS to a truthy value. Treat common truthy forms as true.
+    case "${GITHUB_ACTIONS:-}" in
+        true|TRUE|1|yes|YES)
+            return 0
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+is_ci() {
+    # Generic CI detection: prefer the generic CI variable and some common CI-specific ones.
+    if [ -n "${CI:-}" ] && [ "${CI:-}" != "false" ]; then
+        return 0
+    fi
+
+    if is_github_actions; then
+        return 0
+    fi
+
+    if [ -n "${GITLAB_CI:-}" ] || [ -n "${TRAVIS:-}" ] || [ -n "${CIRCLECI:-}" ] || [ -n "${BUILDKITE:-}" ]; then
+        return 0
+    fi
+
+    if [ -n "${JENKINS_URL:-}" ] || [ -n "${BUILD_NUMBER:-}" ] || [ -n "${TEAMCITY_VERSION:-}" ]; then
+        return 0
+    fi
+
+    return 1
+}
+
+run_as_root() {
+    # Run a command as root using sudo if needed (and available), otherwise run as-is (best-effort).
+    if [ "$(id -u)" -eq 0 ]; then
+        "$@"
+        return $?
+    fi
+
+    if command -v sudo >/dev/null 2>&1; then
+        sudo "$@"
+        return $?
+    fi
+
+    log_warn "run_as_root: sudo not found; attempting to run the command without escalation"
+    "$@"
+    return $?
+}
+
+ci_install() {
+    # Usage: ci_install <pkg1> [pkg2 ...]
+    # Try multiple package managers in CI (apt-get, apk, pacman, dnf, yum, zypper, pkg, brew).
+    if ! is_ci; then
+        log_warn "ci_install: not running in a recognized CI environment; skipping installation: $*"
+        return 1
+    fi
+
+    if [ $# -eq 0 ]; then
+        log_error "ci_install: at least one package name is required"
+        return 1
+    fi
+
+    pkgs=( "$@" )
+
+    # Debian/Ubuntu: apt-get
+    if command -v apt-get >/dev/null 2>&1; then
+        log_info "ci_install: attempting apt-get install: ${pkgs[*]}"
+        # update - ignore failures
+        run_as_root apt-get update || true
+        if run_as_root apt-get install -y "${pkgs[@]}"; then
+            log_success "ci_install: installed ${pkgs[*]} via apt-get"
+            return 0
+        fi
+        log_warn "ci_install: apt-get install failed"
+    fi
+
+    # Alpine: apk
+    if command -v apk >/dev/null 2>&1; then
+        log_info "ci_install: attempting apk add: ${pkgs[*]}"
+        if run_as_root apk add --no-cache "${pkgs[@]}"; then
+            log_success "ci_install: installed ${pkgs[*]} via apk"
+            return 0
+        fi
+        log_warn "ci_install: apk add failed"
+    fi
+
+    # Arch: pacman
+    if command -v pacman >/dev/null 2>&1; then
+        log_info "ci_install: attempting pacman -S: ${pkgs[*]}"
+        if run_as_root pacman -S --noconfirm "${pkgs[@]}"; then
+            log_success "ci_install: installed ${pkgs[*]} via pacman"
+            return 0
+        fi
+        log_warn "ci_install: pacman install failed"
+    fi
+
+    # Fedora/RHEL (dnf)
+    if command -v dnf >/dev/null 2>&1; then
+        log_info "ci_install: attempting dnf install: ${pkgs[*]}"
+        if run_as_root dnf install -y "${pkgs[@]}"; then
+            log_success "ci_install: installed ${pkgs[*]} via dnf"
+            return 0
+        fi
+        log_warn "ci_install: dnf install failed"
+    fi
+
+    # RHEL/CentOS (yum)
+    if command -v yum >/dev/null 2>&1; then
+        log_info "ci_install: attempting yum install: ${pkgs[*]}"
+        if run_as_root yum install -y "${pkgs[@]}"; then
+            log_success "ci_install: installed ${pkgs[*]} via yum"
+            return 0
+        fi
+        log_warn "ci_install: yum install failed"
+    fi
+
+    # openSUSE (zypper)
+    if command -v zypper >/dev/null 2>&1; then
+        log_info "ci_install: attempting zypper install: ${pkgs[*]}"
+        if run_as_root zypper --non-interactive install "${pkgs[@]}"; then
+            log_success "ci_install: installed ${pkgs[*]} via zypper"
+            return 0
+        fi
+        log_warn "ci_install: zypper install failed"
+    fi
+
+    # FreeBSD pkg
+    if command -v pkg >/dev/null 2>&1; then
+        log_info "ci_install: attempting pkg install: ${pkgs[*]}"
+        if run_as_root pkg install -y "${pkgs[@]}"; then
+            log_success "ci_install: installed ${pkgs[*]} via pkg"
+            return 0
+        fi
+        log_warn "ci_install: pkg install failed"
+    fi
+
+    # Homebrew (macOS)
+    if command -v brew >/dev/null 2>&1; then
+        log_info "ci_install: attempting brew install: ${pkgs[*]}"
+        if brew install "${pkgs[@]}"; then
+            log_success "ci_install: installed ${pkgs[*]} via brew"
+            return 0
+        fi
+        log_warn "ci_install: brew install failed"
+    fi
+
+    log_error "ci_install: failed to install packages: ${pkgs[*]} using supported package managers"
+    return 1
+}
+
 ui_print() {
     printf "  ${NC}• %s${NC}\n" "$1"
 }
