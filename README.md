@@ -60,7 +60,7 @@ Flags / 常用参数
 - Verify with public key:
   - `kam verify module.zip --key my-pub-key.pem`
 
-示例公钥（仅示例，不作为实际密钥）:
+我的公钥（可去developer仓库验证）:
 ```
 -----BEGIN PUBLIC KEY-----
 MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAEYeQgxFckNt9d19zqNjiJJvL+inPJXPdK
