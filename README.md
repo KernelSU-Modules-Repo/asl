@@ -112,12 +112,16 @@ Kam 钩子允许你在构建流程不同阶段运行自定义脚本（`hooks/pre
 
 Why / 为什么使用钩子
 --------------------------------------------
+- Automate the Web UI build (planned): fetch and update dependencies, cross-compile, support interactive builds (confirmed via -i / --interactive), sign artifacts, and push releases — to make local builds and iteration easier.自动化构建WEBUI(后续计划)，拉取依赖更新依赖, 交叉编译， 交互式构建 ，签名 ，推送 .便于本地构建便于迭代.
+
 - Automate tasks (sync files, generate metadata, sign artifacts, upload releases).  
   自动化任务（同步文件、生成元数据、签名产物、上传 Release）。
 - Share common utilities via `KAM_HOOKS_ROOT`.  
   通过 `KAM_HOOKS_ROOT` 复用共享脚本和工具。
 - Keep build-time steps within the repo for auditability.  
   将构建过程放入仓库提升审计与可维护性。
+
+- Putting all of these hooks into one action will make that action bloated and difficult to maintain — it becomes harder to debug, enhance, and iterate. 如果将这些钩子写入action, action将变得极为臃肿，不便于调试，改进，迭代。
 
 Naming convention / 命名约定
 --------------------------------------------
@@ -254,8 +258,3 @@ Licensing / 许可与引用
 This project is a fork of [asl](https://github.com/RuriOSS/asl). Keep attributions and follow the original license (see `LICENSE`).
 
 ---
-If you'd like, I can:
-- add more usage examples for `--interactive` (e.g., sample interactive prompts),
-- add a small `.github/workflows/build.yml` file in the repo,
-- or adjust the README language preference (English-only or Chinese-only).
-Which one would you prefer next?
