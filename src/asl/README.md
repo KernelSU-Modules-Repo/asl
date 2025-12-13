@@ -1,5 +1,5 @@
 # asl
-'''
+'''bash
 su
 rurima
 cd /data
