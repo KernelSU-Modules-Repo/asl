@@ -8,8 +8,26 @@ What is this? / 这是干什么的？
 这是一个来自 asl 的 fork — 文档聚焦于 Kam 的构建钩子系统（hooks）。  
 This repo documents the Kam build hook system — how to structure, write, and run pre-/post-build hooks for Kam modules.
 
+---
+Cyber Amber | 赛博琥珀
+- This module is from the official kernel-su module repository and is the first project to use developer private keys for automated signing.
+
+- In addition to automated signing, there's also automated changelog updates, automated version number updates, automated Rurima dependency updates, automated Zim module updates, and even interactive installation to the device after packaging (I haven't added this hook script yet, but it'll be soon).
+
+
+- What is a developer's private key?
+Developer private key obtained from the developers repository
+
+- release attention As long as immutable publishing is enabled, there will be
+
+- Developer private key signing, automated signing by KAM.
+
+- The signature file has the .sig extension and can be verified with my public key.
+
+
 
 ---
+
 
 Security Guarantee / 安全性担保
 --------------------------------------------
@@ -70,7 +88,7 @@ example
 - Keep secrets secure — do not commit private keys to the repository.
 
 ---
-# ![Screenshot]()
+# ![Screenshot](Screenshot_2025-12-08-01-18-25-97_84d3000e3f4017145260f7618db1d683.jpg)
 
 ---
 
