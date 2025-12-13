@@ -48,7 +48,7 @@ This repository documents the Kam build hook system: how to structure, write, an
 ### Verify / 验证
 - After downloading the artifact and its signature (for example `asl.zip` and `asl.zip.sig`):
   - `kam verify asl.zip --key my-pub-key.pem`
-- Example public key (PEM):
+- This my public key (PEM):
 -----BEGIN PUBLIC KEY-----
 MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAEYeQgxFckNt9d19zqNjiJJvL+inPJXPdK
 K20ZjQBmNuLcnWe7dwYoKVfkVpMlqgF+gN1ADDzlRktiC83c4V7Zl/BT/AEVxRcA
@@ -56,6 +56,8 @@ F5Pi+iJLXNDSxSpGCIxb8ixY7BP/KJo8
 -----END PUBLIC KEY-----
 
 [check](https://github.com/KernelSU-Modules-Repo/developers/issues/11)
+
+If you are a developer, feel free to use kam to sign your artifacts.
 
 ### Release / 发布
 - Create a GitHub Release from the CI or locally:
