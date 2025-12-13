@@ -1,5 +1,4 @@
 #!/bin/bash
-set -eu
 
 . "$KAM_HOOKS_ROOT/lib/utils.sh"
 
