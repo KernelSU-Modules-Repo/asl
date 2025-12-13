@@ -5,11 +5,12 @@
 What is this? / 这是干什么的？
 ============================================
 
-这是一个来自 asl 的 fork — 文档聚焦于 Kam 的构建钩子系统（hooks）。  
-This repo documents the Kam build hook system — how to structure, write, and run pre-/post-build hooks for Kam modules.
+这是一个来自 asl 的 fork（实际上改的不像样子了，逻辑上比原模块简单不少，体积大幅减少，因为依赖了termux） — 文档聚焦于 Kam 的构建钩子系统（hooks）。  
+
+This is a fork from asl (actually quite different from the original, logically much simpler than the original module, and significantly smaller in size, because it depends on termux) — the documentation focuses on Kam's build hook system.  
 
 ---
-Cyber Amber | 赛博琥珀
+Cyber Amber | 赛博琥珀(🤔
 - This module is from the official kernel-su module repository and is the first project to use developer private keys for automated signing.
 
 - In addition to automated signing, there's also automated changelog updates, automated version number updates, automated Rurima dependency updates, automated Zim module updates, and even interactive installation to the device after packaging (I haven't added this hook script yet, but it'll be soon).
@@ -18,7 +19,8 @@ Cyber Amber | 赛博琥珀
 - What is a developer's private key?
 Developer private key obtained from the developers repository
 
-- release attention As long as immutable publishing is enabled, there will be
+- Release attestation
+(json) As long as immutable publishing is enabled, there will be
 
 - Developer private key signing, automated signing by KAM.
 
