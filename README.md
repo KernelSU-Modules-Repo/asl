@@ -1,12 +1,80 @@
 # Kam Build Hooks (forked from asl)
-[![Release](https://img.shields.io/github/v/release/KernelSU-Modules-Repo/asl?label=release&color=blue&style=flat-square)](https://github.com/KernelSU-Modules-Repo/asl/releases) [![License](https://img.shields.io/github/license/KernelSU-Modules-Repo/asl?style=flat-square)](https://github.com/KernelSU-Modules-Repo/asl/blob/main/LICENSE) [![Last commit](https://img.shields.io/github/last-commit/KernelSU-Modules-Repo/asl?style=flat-square)](https://github.com/KernelSU-Modules-Repo/asl/commits/main) [![Issues](https://img.shields.io/github/issues/KernelSU-Modules-Repo/asl?style=flat-square)](https://github.com/KernelSU-Modules-Repo/asl/issues) [![Stars](https://img.shields.io/github/stars/KernelSU-Modules-Repo/asl?style=social)](https://github.com/KernelSU-Modules-Repo/asl/stargazers) [![Downloads](https://img.shields.io/github/downloads/KernelSU-Modules-Repo/asl/total?style=flat-square)](https://github.com/KernelSU-Modules-Repo/asl/releases) [![Sponsor](https://img.shields.io/badge/Sponsor-GitHub-brightgreen?style=flat-square)](https://github.com/sponsors/LIghtJUNction)
+[![Release](https://img.shields.io/github/v/release/KernelSU-Modules-Repo/asl?label=release&color=blue&style=flat-square)](https://github.com/KernelSU-Modules-Repo/asl/releases) [![License](https://img.shields.io/github/license/KernelSU-Modules-Repo/asl?style=flat-square)](https://github.com/KernelSU-Modules-Repo/asl/blob/main/LICENSE) [![Last commit](https://img.shields.io/github/last-commit/KernelSU-Modules-Repo/asl?style=flat-square)](https://github.com/KernelSU-Modules-Repo/asl/commits/main) [![Issues](https://img.shields.io/github/issues/KernelSU-Modules-Repo/asl?style=flat-square)](https://github.com/KernelSU-Modules-Repo/asl/issues) 
+
+[![Stars](https://img.shields.io/github/stars/KernelSU-Modules-Repo/asl?style=social)](https://github.com/KernelSU-Modules-Repo/asl/stargazers) [![Downloads](https://img.shields.io/github/downloads/KernelSU-Modules-Repo/asl/total?style=flat-square)](https://github.com/KernelSU-Modules-Repo/asl/releases) [![Sponsor](https://img.shields.io/badge/Sponsor-GitHub-brightgreen?style=flat-square)](https://github.com/sponsors/LIghtJUNction)
+# What is this?
 
 这是一个来自 asl 的 fork — 文档聚焦于 Kam 的构建钩子系统（hooks）。  
 This repository documents the Kam build hook system: how to structure, write, and run pre-/post-build hooks.
 
 ---
+![screenshot](Screenshot_2025-12-08-01-18-25-97_84d3000e3f4017145260f7618db1d683.jpg)
+
+
+## Quick start / 快速开始
+
+### Download & install / 下载与安装（示例）
+- Download the latest release from the Releases page:
+  - https://github.com/KernelSU-Modules-Repo/asl/releases
+- Example (using `rurima`):  
+  - `rurima install https://github.com/KernelSU-Modules-Repo/asl/releases/latest/download/asl.zip`
+- On Android (Termux + root) — 示例：
+  - Install Termux (F-Droid / Play Store), open a shell, and if required, switch to root: `su`
+  - `rurima install /path/to/asl.zip` or `rurima install asl`
+- For other installation methods (Magisk / KernelSU), follow your manager's workflow.
+
+### Build / 构建
+- Install the `kam` CLI (if not already installed):
+  - `cargo install kam`
+- Build the module from the repository root:
+  - `cd asl`
+  - `kam build`
+- Output artifacts are placed under `dist/` (e.g. `dist/asl.zip`).
+- Example: Sign and create a GitHub release:
+  - `kam build -s -r`
+  - Useful flags:
+    - `-s` — enable signing (`KAM_SIGN_ENABLED`)
+    - `-r` — create a GitHub Release
+    - `-P` — create a pre-release (set `KAM_PRE_RELEASE=1`)
+    - `-i` — create an immutable release (set `KAM_IMMUTABLE_RELEASE=1`)
+
+### Sign / 签名
+- Import your private key into `kam`:
+  - `kam secret import main /path/to/xxx.pem`
+- Sign the update JSON or artifacts:
+  - `kam sign update.json --sigstore --timestamp`
+  - Or sign specific artifact(s): `kam sign dist/asl.zip --sigstore --timestamp`
+
+### Verify / 验证
+- After downloading the artifact and its signature (for example `asl.zip` and `asl.zip.sig`):
+  - `kam verify asl.zip --key my-pub-key.pem`
+- Example public key (PEM):
+-----BEGIN PUBLIC KEY-----
+MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAEYeQgxFckNt9d19zqNjiJJvL+inPJXPdK
+K20ZjQBmNuLcnWe7dwYoKVfkVpMlqgF+gN1ADDzlRktiC83c4V7Zl/BT/AEVxRcA
+F5Pi+iJLXNDSxSpGCIxb8ixY7BP/KJo8
+-----END PUBLIC KEY-----
+
+[check](https://github.com/KernelSU-Modules-Repo/developers/issues/11)
+
+### Release / 发布
+- Create a GitHub Release from the CI or locally:
+  - `kam build -r` (add `-s` to sign before releasing)
+- Use `KAM_PRE_RELEASE=1` for pre-releases, and `KAM_IMMUTABLE_RELEASE=1` to avoid re-uploading an existing tag.
+
+### Action secrets / GitHub Actions（CI）
+- `KAM_PRIVATE_KEY`: Add this secret (PEM content) to your repository's secrets to allow CI to sign artifacts or releases.
+- Keep keys secure — do not store private keys in code. Rotate keys and restrict access as needed.
+
 
 Table of Contents | 目录
+- [Quick start / 快速开始](#quick-start--快速开始)
+  - [Download & install / 下载与安装](#download--install--下载与安装)
+  - [Build / 构建](#build--构建)
+  - [Sign / 签名](#sign--签名)
+  - [Verify / 验证](#verify--验证)
+  - [Release / 发布](#release--发布)
+  - [Action secrets / GitHub Actions（CI）](#action-secrets--github-actionsci)
 - [Overview / 概述](#overview--概述)
 - [Why / 为什么使用钩子](#why--为什么使用钩子)
 - [Naming convention / 命名约定](#naming-convention--命名约定)
@@ -19,6 +87,7 @@ Table of Contents | 目录
 - [Licensing / 许可与引用](#licensing--许可与引用)
 
 ---
+# BUILD-SYSTEM
 
 ## Overview / 概述
 Kam hooks let you run custom scripts at different stages of the build lifecycle. Hooks are small scripts placed under `hooks/pre-build/` or `hooks/post-build/` that Kam executes during `kam build`.

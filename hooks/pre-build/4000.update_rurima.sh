@@ -16,7 +16,7 @@ require_command "sha256sum" "Please install sha256sum (required for hash verific
 MODULE_ID="${KAM_MODULE_ID:-asl}"
 VERSION_FILE="${KAM_MODULE_ROOT}/rurima.version"
 HASH_FILE="${KAM_MODULE_ROOT}/rurima.hash"
-DEST_DIR="${KAM_DIST_DIR}/rurima-bin"
+DEST_DIR="/tmp/rurima-bin"
 EXEC_DEST="${KAM_MODULE_ROOT}/.local/bin"
 EXEC_PATH="${EXEC_DEST}/rurima"
 EXEC_TMP_PATH="${EXEC_DEST}/rurima.tmp"

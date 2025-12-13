@@ -1,8 +1,8 @@
 [prop]
 id = "asl"
 name = "AndroidSubSystem4Linux"
-version = "1.0.0"
-versionCode = 1765549786922
+version = "1.0.5"
+versionCode = 1765558087531
 author = "LIghtJUNction"
 description = "Run GUN/Linux on android , powered by rurima & build-system: kam."
 updateJson = "https://github.com/KernelSU-Modules-Repo/releases/latest/download/asl.zip"
@@ -16,7 +16,7 @@ readme = "https://github.com/KernelSU-Modules-Repo/blob/main/README.md"
 readme_file = "README.md"
 changelog = "https://github.com/KernelSU-Modules-Repo/blob/main/CHANGELOG.md"
 changelog_file = "CHANGELOG.md"
-screenshots = []
+screenshots = ["Screenshot_2025-12-08-01-18-25-97_84d3000e3f4017145260f7618db1d683.jpg"]
 categories = ["tools"]
 keywords = [
     "ka",
@@ -42,8 +42,7 @@ max_num = 0
 min_api = 21
 max_api = 35
 verified = false
-features = [
-]
+features = []
 
 [mmrl.repo.note]
 title = ""

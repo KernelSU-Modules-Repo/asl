@@ -59,29 +59,22 @@ EOF
 )
 printf "%s\n" "$RELEASE_NOTES" > "$TMP_CHANGELOG"
 
-# Create or update release
-if ! gh release view "$TAG" >/dev/null 2>&1; then
-    PRE_FLAG=""
-    if [ "${KAM_PRE_RELEASE:-0}" = "1" ]; then
-        PRE_FLAG="--prerelease"
-    fi
-    log_info "Creating GitHub release $TAG"
-    gh release create "$TAG" --title "${KAM_MODULE_ID}-${KAM_MODULE_VERSION_CODE}-${KAM_MODULE_VERSION}" --notes-file "$TMP_CHANGELOG" $PRE_FLAG || log_warn "Failed to create release $TAG"
-else
-    log_info "Editing GitHub release $TAG"
-    gh release edit "$TAG" --title "${KAM_MODULE_ID:-$TAG}" --notes-file "$TMP_CHANGELOG" || log_warn "Failed to edit release $TAG"
+# Check if release already exists
+if gh release view "$TAG" >/dev/null 2>&1; then
+    log_error "Release $TAG already exists and is immutable, cannot proceed"
+    exit 1
 fi
 
-# Upload files from DIST to the release (clobber existing)
-if [ -d "$DIST" ]; then
-    log_info "Uploading assets from $DIST to release $TAG"
-    for f in "$DIST"/*; do
-        [ -f "$f" ] || continue
-        log_info "Uploading: $f"
-        gh release upload "$TAG" "$f" --clobber || log_warn "Failed to upload: $f"
-    done
+# Create release and upload all assets in one step
+PRE_FLAG=""
+if [ "${KAM_PRE_RELEASE:-0}" = "1" ]; then
+    PRE_FLAG="--prerelease"
+fi
+if [ -d "$DIST" ] && [ "$(ls -A "$DIST")" ]; then
+    log_info "Creating GitHub release $TAG and uploading assets from $DIST"
+    gh release create "$TAG" --title "${KAM_MODULE_ID}-${KAM_MODULE_VERSION_CODE}-${KAM_MODULE_VERSION}" --notes-file "$TMP_CHANGELOG" $PRE_FLAG "$DIST"/* || { log_error "Failed to create release $TAG and upload assets"; exit 1; }
 else
-    log_warn "Dist directory not found: $DIST"
+    log_warn "Dist directory not found or empty: $DIST"
 fi
 
 log_success "Upload step finished"
