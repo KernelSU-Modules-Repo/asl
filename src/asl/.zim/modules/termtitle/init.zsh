@@ -1,4 +1,5 @@
 [[ ${TERM} != dumb ]] && () {
+  builtin emulate -L zsh
   local termtitle_format
   local zhooks zhook
   zstyle -a ':zim:termtitle' hooks 'zhooks' || zhooks=(precmd)
@@ -15,10 +16,10 @@
           termtitle_format='%n@%m: %~'
       case ${TERM} in
         screen)
-          builtin eval "termtitle_update_${zhook}() { print -Pn '\Ek'${(qq)termtitle_format}'\E\\' }"
+          functions[termtitle_update_${zhook}]="print -Pn '\Ek'${(qq)termtitle_format}'\E\\'"
           ;;
         *)
-          builtin eval "termtitle_update_${zhook}() { print -Pn '\E]0;'${(qq)termtitle_format}'\a' }"
+          functions[termtitle_update_${zhook}]="print -Pn '\E]0;'${(qq)termtitle_format}'\a'"
           ;;
       esac
     fi
