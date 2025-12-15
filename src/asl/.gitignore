@@ -111,7 +111,7 @@ npm-debug.log
 # local caches & system-specific
 .cache/
 tmp/
-.local/
+# .local/
 
 # --------------------------------------------------
 # Notes

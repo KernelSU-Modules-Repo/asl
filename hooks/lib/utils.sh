@@ -276,7 +276,6 @@ require_command_or_ci_install() {
         log_warn "ci_install failed for $cmd"
     fi
 
-    # Fall back to the original behavior (and exit) if the command is still not present.
     require_command "$cmd" "$msg"
 }
 
