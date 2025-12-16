@@ -56,7 +56,7 @@ set_perm "$MODPATH/action.sh" root root 755
 set_perm "$MODPATH/uninstall.sh" root root 755
 
 # 唯一入口 700
-set_perm "$MODPATH/system/xbin/rurima" root root 700
+set_perm "$MODPATH/system/bin/rurima" root root 700
 
 [ -d "/data/data/com.termux" ] && echo "Termux is installed" || echo "Termux is not installed , Remember to install after installation."
 
