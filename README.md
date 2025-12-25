@@ -42,6 +42,16 @@ This module is unlikely to cause a boot loop, and its content is 100% manually e
 
 ---
 
+Install / 安装
+--------------------------------------------
+
+如果你安装了kam(>0.5.17)
+通过以下命令从git仓库安装本模块
+kam install KernelSU-Modules-Repo/asl
+
+--------------------------------------------
+
+
 Quick start / 快速开始
 --------------------------------------------
 
@@ -83,7 +93,6 @@ example
 - ./alpine/.rurienv It has been set to an unmodifiable attribute; remove it using `chattr -i ./alpine/.rurienv`.
 
 
- destructive actions (useful locally).  Do not rely on `KAM_IMMUTABLE_RELEASE` — it was removed in favor of interactive handling.
 
 ### Action secrets / GitHub Actions（CI）
 - `KAM_PRIVATE_KEY`: Add this secret (PEM content) to your repository to enable CI signing.
