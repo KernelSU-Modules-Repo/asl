@@ -18,6 +18,10 @@
 # 自动提取模块.local到kam共享目录，采用硬链接方式
 # 为保证模块卸载时候不会有残留文件，uninstall.sh文件不要删
 import __customize__
+
+# Define NL variable if not already defined
+NL="${NL:-'
+'}"
 # --> .local/bin ~~> /data/adb/kam/bin
 # --> .local/lib ~~> /data/adb/kam/lib
 
@@ -56,7 +60,6 @@ divider "#" 25
 print "$(i18n "USAGE_GUIDE")"
 
 launch url "https://github.com/KernelSU-Modules-Repo/asl"
-# launch ...
 
 # import rich --> 这里有更多，比如 ask函数 confirm函数
 
