@@ -102,12 +102,7 @@ example
 
 - ./alpine/.rurienv It has been set to an unmodifiable attribute; remove it using `chattr -i ./alpine/.rurienv`.
 
-
- destructive actions (useful locally).  Do not rely on `KAM_IMMUTABLE_RELEASE` — it was removed in favor of interactive handling.
-
----
-
-
+--------------------------------------------
 Security Guarantee / 安全性担保
 --------------------------------------------
 
@@ -117,8 +112,7 @@ This module is unlikely to cause a boot loop, and its content is 100% manually e
 这个模块不太可能导致设备无法开机（bootloop），其内容100%是手动编辑的，不存在任何AI生成的幻觉或错误。不过，这份文档是由AI生成的，我做了一些手动修正。您可以检查  /system/bin/rurima  文件，它只设置了一些环境变量。模块中只包含  action.sh ，没有  services.sh ，它仅为  rurima  可执行文件提供一个运行时环境，因此不应该导致设备无法开机。在我设计它时，我完全移除了原始模块中复杂的管理逻辑，并将其交给用户自行下载和管理子系统。
 
 
----
-
+--------------------------------------------
 
 ### Action secrets / GitHub Actions（CI）
 - `KAM_PRIVATE_KEY`: Add this secret (PEM content) to your repository to enable CI signing.
