@@ -1,4 +1,4 @@
-# FILE AUTOMATICALLY GENERATED FROM /home/runner/work/asl/asl/src/asl/.zimrc
+# FILE AUTOMATICALLY GENERATED FROM /home/lightjunction/GITHUB/KernelSU-Modules-Repo/asl/src/asl/.zimrc
 # EDIT THE SOURCE FILE AND THEN RUN zimfw build. DO NOT DIRECTLY EDIT THIS FILE!
 
 if [[ -e ${ZIM_CONFIG_FILE:-${ZDOTDIR:-${HOME}}/.zimrc} ]] zimfw() { source "${HOME}/.zim/zimfw.zsh" "${@}" }

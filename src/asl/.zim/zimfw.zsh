@@ -227,11 +227,12 @@ Per-call initialization options:
     esac
     shift
   done
+  zname=modules/${zname}
+  _znames+=(${zname})
   if [[ ${zurl} == /* ]]; then
     _zpaths[${zname}]=${zurl%%/##}
     zurl=
   else
-    zname=modules/${zname}
     _zpaths[${zname}]=${ZIM_HOME}/${zname}
   fi
   if [[ ${+_zurls[${zname}]} -ne 0 && ${_zurls[${zname}]} != ${zurl} ]]; then
@@ -239,7 +240,6 @@ Per-call initialization options:
     _zfailed=1
     return 2
   fi
-  _znames+=(${zname})
   _zurls[${zname}]=${zurl}
   local -r zroot_dir=${_zpaths[${zname}]}${zroot:+/${zroot}}
   _zroot_dirs+=(${zroot_dir})
@@ -438,9 +438,8 @@ zmodule completion
 # Fish-like syntax highlighting for Zsh, must be sourced after completion.
 zmodule zsh-users/zsh-syntax-highlighting
 # Fish-like history search for Zsh, must be sourced after
-# zsh-users/zsh-syntax-highlighting. Bind keyboard shortcuts in your ~/.zshrc:
-# https://github.com/zsh-users/zsh-history-substring-search/blob/master/README.md#usage
-#zmodule zsh-users/zsh-history-substring-search
+# zsh-users/zsh-syntax-highlighting.
+zmodule zsh-users/zsh-history-substring-search
 # Fish-like autosuggestions for Zsh. Add the following to your ~/.zshrc to boost
 # performance: ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 zmodule zsh-users/zsh-autosuggestions
@@ -473,7 +472,7 @@ _zimfw_list_unused_paths() {
   local -r zpaths=(${(v)_zpaths})
   # Search into subdirectories
   while (( i <= ${#zinstalled} )); do
-    if (( ${zpaths[(I)${zinstalled[i]}/*]} )); then
+    if (( zpaths[(I)${zinstalled[i]}/*] )); then
       zinstalled+=(${zinstalled[i]}/*(N/))
       zinstalled[i]=()
     else
@@ -483,7 +482,7 @@ _zimfw_list_unused_paths() {
   # Unused = all installed dirs not in zpaths
   _zunused_paths=(${zinstalled:|zpaths})
   local zunused
-  for zunused (${_zunused_paths}) _zimfw_print -R "${_zbold}${zunused##${ZIM_HOME}/}:${_znormal} ${zunused}${1}"
+  for zunused (${_zunused_paths}) _zimfw_print -R "${_zbold}${zunused##${ZIM_HOME}/}${_znormal}${1}"
 }
 
 _zimfw_check_dumpfile() {
@@ -552,7 +551,7 @@ _zimfw_info() {
   _zimfw_info_print_symlink ZIM_HOME ${ZIM_HOME}
   _zimfw_info_print_symlink 'zimfw config' ${_zconfig}
   _zimfw_info_print_symlink 'zimfw script' ${__ZIMFW_FILE}
-  print -R 'zimfw version:        '${_zversion}' (built at 2025-11-19 23:36:54 UTC, previous commit is ec0ff5c)'
+  print -R 'zimfw version:        '${_zversion}' (built at 2025-12-19 13:42:11 UTC, previous commit is 88af323)'
   local zparam
   for zparam in LANG ${(Mk)parameters:#LC_*} OSTYPE TERM TERM_PROGRAM TERM_PROGRAM_VERSION ZSH_VERSION; do
     print -R ${(r.22....:.)zparam}${(P)zparam}
@@ -616,14 +615,16 @@ _zimfw_run_list() {
   local -r zname=${1}
   local -r zpath=${_zpaths[${zname}]}
   local -r zroot_dirs=(${(M)_zroot_dirs:#${zpath}(|/*)})
-  print -nR "${_zbold}${zname}:${_znormal} ${zpath}"
+  print -nR ${_zbold}${zname}${_znormal}
   if [[ ! -e ${zpath} ]] print -n ' (not installed)'
   if [[ -z ${_zurls[${zname}]} ]] print -n ' (external)'
-  if (( ${_zfrozens[${zname}]} )) print -n ' (frozen)'
+  if (( _zfrozens[${zname}] )) print -n ' (frozen)'
   if [[ ${_zdisabled_paths[(I)${zpath}]} -ne 0 && ${zroot_dirs} == (${zpath}) ]] print -n ' (disabled)'
   print
   if (( _zprintlevel > 1 )); then
-    if [[ ${_zfrozens[${zname}]} -eq 0 && -n ${_zurls[${zname}]} ]]; then
+    if [[ -z ${_zurls[${zname}]} ]]; then
+      print -R '  From: '${zpath}
+    elif (( ! _zfrozens[${zname}] )); then
       if [[ ${_ztools[${zname}]} == mkdir ]]; then
         print '  From: mkdir'
       else
@@ -645,8 +646,12 @@ _zimfw_run_list() {
       if [[ ${zroot_dirs} == (${zpath}) ]]; then
         zindent='  '
       else
-        print -nR '  Root: '${zroot_dir}
-        if (( ${_zdisabled_paths[(I)${zroot_dir}]} )) print -n ' (disabled)'
+        if [[ ${zroot_dir} == ${zpath} ]]; then
+          print -n '  Root: .'
+        else
+          print -nR '  Root: '${zroot_dir##${zpath}/}
+        fi
+        if (( _zdisabled_paths[(I)${zroot_dir}] )) print -n ' (disabled)'
         print
         zindent='    '
       fi
@@ -1073,7 +1078,7 @@ zimfw() {
     local -r _znormal= _zbold= _zred= _znormalred= _zgreen= _zyellow= _znormalyellow=
   fi
   local -r _zerror="${_zred}x " _zokay="${_zgreen}) ${_znormal}" _zwarn="${_zyellow}! "
-  local -r _zconfig=${ZIM_CONFIG_FILE:-${ZDOTDIR:-${HOME}}/.zimrc} _zversion='1.19.1'
+  local -r _zconfig=${ZIM_CONFIG_FILE:-${ZDOTDIR:-${HOME}}/.zimrc} _zversion='1.20.0'
   local -r zusage="Usage: ${_zbold}${0}${_znormal} <action> [option]
 
 Actions:
