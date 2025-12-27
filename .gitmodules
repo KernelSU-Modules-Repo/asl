@@ -1,0 +1,4 @@
+[submodule "src/asl/lib/kamfw"]
+	path = src/asl/lib/kamfw
+	url = https://github.com/MemDeco-WG/kamfw.git
+	branch = main

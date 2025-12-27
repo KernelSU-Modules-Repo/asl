@@ -1,69 +1,220 @@
-#! bin/sh
+# shellcheck shell=ash
+# {{prop.name}} customize.sh
+#
+# ---------------------------------------------------------------------------------------
+# CUSTOM INSTALLATION LOGIC
+# ---------------------------------------------------------------------------------------
+[ -f "$MODPATH/lib/kamfw/.kamfwrc" ] && . "$MODPATH/lib/kamfw/.kamfwrc" || abort '! File "kamfw/.kamfwrc" does not exist!'
+# 作者注：导入以上工具库，会自动依据ROOT管理器
+# 进行一些特殊处理
+# 比如，如果是magisk.补全META-INF
+# boot-completed --> service
+# 记得在boot-completed调用：
+# wait_boot_if_magisk
+# 详见 lib/kamfw/magisk.sh
+# lib/kamfw/ksu.sh
+# lib/kamfw/ap.sh
+# 依赖控制,文件共享
+# 自动提取模块.local到kam共享目录，采用硬链接方式
+# 为保证模块卸载时候不会有残留文件，uninstall.sh文件不要删
+import __customize__
+# --> .local/bin ~~> /data/adb/kam/bin
+# --> .local/lib ~~> /data/adb/kam/lib
 
-# Hello asl
+# i18n
+import i18n
+import lang
+import rich
 
-# This is a customize script for the kam module
-# You can add custom installation or configuration commands here
+# 任务一：模块使用指南
+set_i18n "USAGE_GUIDE" \
+    "zh" "快速开始 / Quick start
 
-# "Installing Example Module Name module..."
+下载与安装
+下载发行版: https://github.com/KernelSU-Modules-Repo/asl/releases
 
+安装 Termux（如果未安装）
+
+运行：
+
+su
+rurima
+
+dep # 检查依赖
+pull # 拉取镜像
+
+示例：
+
+cd /data
+mkdir asl && cd asl
+使用镜像站: https://images.linuxcontainers.org/
+pull alpine:edge ./alpine
+run ./alpine
+
+注意：
+修改 /etc/resolv.conf（要删除旧文件并创建新文件，你可以使用 MT Manager 或其它工具，或使用命令行）
+写入 DNS 服务器配置，之后即可访问互联网。
+
+如何卸载？
+./alpine/.rurienv 已被设置为不可修改属性；使用 chattr -i ./alpine/.rurienv 移除此属性。" \
+    "en" "Quick start / 快速开始
+
+Download & install
+Download releases: https://github.com/KernelSU-Modules-Repo/asl/releases
+
+Install Termux (if not installed)
+
+Run:
+
+su
+rurima
+
+dep # check dependencies
+pull # pull image
+
+Example:
+
+cd /data
+mkdir asl && cd asl
+# Use images from: https://images.linuxcontainers.org/
+pull alpine:edge ./alpine
+run ./alpine
+
+Note:
+Modify /etc/resolv.conf (To remove old files and create new ones, you can use MT Manager or other tools, or do it via the command line.)
+Write DNS server configuration and you will now be able to access the internet.
+
+How do I uninstall it?
+./alpine/.rurienv It has been set to an unmodifiable attribute; remove it using chattr -i ./alpine/.rurienv."
+
+divider "#"
+print "$(i18n "INSTALL_START")"
+
+newline 1
+
+# apply permissions where relevant (non-destructive - only if files exist)
+print "$(i18n "PERM_FIX")"
+
+# Ensure main binary permission is strict
+if [ -f "$MODPATH/system/xbin/rurima" ]; then
+    set_perm "$MODPATH/system/xbin/rurima" root root 700
+    print "  $(i18n 'PERM_SET_FILE') system/xbin/rurima"
+fi
+
+divider "#"
+
+# Print end-user usage guide (detailed)
+print "$(i18n "USAGE_GUIDE")"
+
+# import launcher
+
+# launch url "https://github.com/UserName/repo"
+# launch ...
+
+# import rich --> 这里有更多，比如 ask函数 confirm函数
+
+##################################
+# 备忘文档 -- 可删除               #
+# You can delete this section    #
+##################################
+# This script is sourced by the module installer script after all files are extracted
+# and default permissions/secontext are applied.
+#
+# Useful for:
+# - Checking device compatibility (ARCH, API)
+# - Setting special permissions
+# - Customizing installation based on user environment
+#
+# ---------------------------------------------------------------------------------------
+# AVAILABLE VARIABLES
+# ---------------------------------------------------------------------------------------
+# (KernelSU-only) KSU (bool):           true if running in KernelSU environment
+# (KernelSU-only) KSU_VER (string):     KernelSU version string (e.g. v0.9.5)
+# (KernelSU-only) KSU_VER_CODE (int):   KernelSU version code (userspace)
+# (KernelSU-only) KSU_KERNEL_VER_CODE (int): KernelSU version code (kernel space)
+# NOTE: KernelSU variables are only provided by KernelSU (not guaranteed on stock Magisk).
+# Guard usage example:
+#    if [ "$KSU" = "true" ]; then
+#        # KernelSU-only logic
+#    else
+#        # Fallback for Magisk/APatch or other environments
+#    fi
+#
+# KernelPatch/KernelSU/APatch related variables
+# (KernelPatch-only) KERNELPATCH (bool):   true if running in KernelPatch environment
+# (KernelPatch-only) KERNEL_VERSION (hex): Kernel version inherited from KernelPatch (e.g. 50a01 -> 5.10.1)
+# (KernelPatch-only) KERNELPATCH_VERSION (hex): KernelPatch version identifier (e.g. a05 -> 0.10.5)
+# (KernelPatch-only) SUPERKEY (string):    Value provided by KernelPatch for invoking kpatch/supercall
+# NOTE: The KernelPatch variables above are provided by KernelPatch and may NOT exist on a stock Magisk installation.
+#       If your module must work on both, check for their presence before using them:
+#         if [ -n "$KERNELPATCH" ] && [ "$KERNELPATCH" = "true" ]; then
+#           # KernelPatch-specific handling
+#         fi
+#
+# APatch related variables
+# (APatch-only) APATCH (bool):        true if running in APatch environment
+# (APatch-only) APATCH_VER_CODE (int): APatch current version code (e.g. 10672)
+# (APatch-only) APATCH_VER (string):  APatch version string (e.g. "10672")
+# NOTE: The APatch variables above are specific to APatch (a Magisk fork). They are NOT guaranteed to exist on stock Magisk.
+#       Guard your scripts like:
+#         if [ "$APATCH" = "true" ]; then
+#           # APatch-specific logic
+#         fi
+#
+# Common environment variables (present across environments)
+# BOOTMODE (bool):      always true in KernelSU and APatch (recovery / boot mode)
+# MODPATH (path):       Path where module files are installed (e.g. /data/adb/modules/{{prop.id}})
+# TMPDIR (path):        Path to temporary directory
+# ZIPFILE (path):       Path to the installation ZIP
+# ARCH (string):        Device architecture: arm, arm64, x86, x64
+# IS64BIT (bool):       true if ARCH is arm64 or x64
+# API (int):            Android API level (e.g. 33 for Android 13)
+#
+# WARNING:
+# - In APatch, MAGISK_VER_CODE is typically 27000 and MAGISK_VER is 27.0 (so some Magisk-related checks behave differently).
+# - Many KernelPatch/APatch features are not present on stock Magisk. When writing portable installation code,
+#   explicitly check for variable presence and provide sensible fallbacks:
+#     if [ -n "$APATCH" ] && [ "$APATCH" = "true" ]; then
+#         # APatch-only handling
+#     else
+#         # Stock Magisk fallback handling (or skip)
+#     fi
+#
+# ---------------------------------------------------------------------------------------
+# AVAILABLE FUNCTIONS
+# ---------------------------------------------------------------------------------------
 # ui_print <msg>
-#     print <msg> to console
-#     Avoid using 'echo' as it will not display in custom recovery's console
-
+#     Print message to console. Avoid 'echo'.
+#
 # abort <msg>
-#     print error message <msg> to console and terminate the installation
-#     Avoid using 'exit' as it will skip the termination cleanup steps
-
+#     Print error message and terminate installation.
+#
 # set_perm <target> <owner> <group> <permission> [context]
-#     if [context] is not set, the default is "u:object_r:system_file:s0"
-#     this function is a shorthand for the following commands:
-#        chown owner.group target
-#        chmod permission target
-#        chcon context target
-
-# set_perm_recursive <directory> <owner> <group> <dirpermission> <filepermission> [context]
-#     if [context] is not set, the default is "u:object_r:system_file:s0"
-#     for all files in <directory>, it will call:
-#        set_perm file owner group filepermission context
-#     for all directories in <directory> (including itself), it will call:
-#        set_perm dir owner group dirpermission context
-
-# KSU (bool): a variable to mark that the script is running in the KernelSU environment, and the value of this variable will always be true. You can use it to distinguish between KernelSU and Magisk.
-# KSU_VER (string): the version string of currently installed KernelSU (e.g. v0.4.0).
-# KSU_VER_CODE (int): the version code of currently installed KernelSU in userspace (e.g. 10672).
-# KSU_KERNEL_VER_CODE (int): the version code of currently installed KernelSU in kernel space (e.g. 10672).
-# BOOTMODE (bool): always be true in KernelSU.
-# MODPATH (path): the path where your module files should be installed.
-# TMPDIR (path): a place where you can temporarily store files.
-# ZIPFILE (path): your module's installation ZIP.
-# ARCH (string): the CPU architecture of the device. Value is either arm, arm64, x86, or x64.
-# IS64BIT (bool): true if $ARCH is either arm64 or x64.
-# API (int): the API level (Android version) of the device (e.g., 23 for Android 6.0).
-
-ui_print "Installing asl..."
-# 目录权限
-set_perm_recursive "$MODPATH/.local/bin" root root 755 755
-set_perm_recursive "$MODPATH/.zim" root root 755 755
-set_perm_recursive "$MODPATH/.config" root root 755 755
-
-# 单个文件权限
-set_perm "$MODPATH/.p10k.zsh" root root 755
-set_perm "$MODPATH/.zshrc" root root 755
-set_perm "$MODPATH/.zimrc" root root 755
-set_perm "$MODPATH/.rurimarc" root root 755
-set_perm "$MODPATH/action.sh" root root 755
-set_perm "$MODPATH/uninstall.sh" root root 755
-
-# 唯一入口 700
-set_perm "$MODPATH/system/xbin/rurima" root root 700
-
-[ -d "/data/data/com.termux" ] && echo "Termux is installed" || echo "Termux is not installed , Remember to install after installation."
-
-ui_print "NOTE: 请重启终端，然后使用 su 提权，再使用 rurima 进入 rurima 虚拟环境。"
-
-ui_print "NOTE: 請重啟終端，然後使用 su 提權，再使用 rurima 進入 rurima 虛擬環境。"
-
-ui_print "NOTE: Please restart the terminal, then use 'su' to gain root privileges, and run 'rurima' to enter the rurima virtual environment."
-
-ui_print "NOTE: Перезапустите терминал, затем используйте 'su' для получения прав суперпользователя и выполните 'rurima' для входа в виртуальное окружение rurima."
+#     Set permissions for a file.
+#     Default context: "u:object_r:system_file:s0"
+#
+# set_perm_recursive <dir> <owner> <group> <dirperm> <fileperm> [context]
+#     Recursively set permissions for a directory.
+#     Default context: "u:object_r:system_file:s0"
+#
+# ---------------------------------------------------------------------------------------
+# KERNELSU FEATURES
+# ---------------------------------------------------------------------------------------
+#
+# REMOVE (Whiteout):
+# List directories/files to be "removed" from the system (overlaid with whiteout).
+# KernelSU executes: mknod <TARGET> c 0 0
+#
+# REMOVE="
+# /system/app/BloatwareApp
+# /system/priv-app/AnotherApp
+# "
+#
+# REPLACE (Opaque):
+# List directories to be replaced by an empty directory (or your module's version).
+# KernelSU executes: setfattr -n trusted.overlay.opaque -v y <TARGET>
+#
+# REPLACE="
+# /system/app/YouTube
+# "
+#
