@@ -29,6 +29,8 @@ jobs:
       - name: Run kam command
         shell: bash
         run: |
+          git submodule update --init --recursive
+          git submodule update --remote --merge --recursive
           kam build --help
           rm -rf dist
           chmod +x hooks/**/*
