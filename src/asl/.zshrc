@@ -1,5 +1,5 @@
 #. ${HOME}.rurimarc
-## 以上说明意思是p10k有个即时提示功能，速度非常快
+## p10k有个即时提示功能，速度非常快
 ## 如果在下面写,标准输出会被p10k抓到
 ## 影响显示效果
 ## 但是说实话开头打印点提示信息也花不了多少时间
@@ -128,10 +128,20 @@ source ${ZIM_HOME}/init.zsh
 
 zmodload -F zsh/terminfo +p:terminfo
 # Bind ^[[A/^[[B manually so up/down works both before and after zle-line-init
-for key ('^[[A' '^P' ${terminfo[kcuu1]}) bindkey ${key} history-substring-search-up
-for key ('^[[B' '^N' ${terminfo[kcud1]}) bindkey ${key} history-substring-search-down
-for key ('k') bindkey -M vicmd ${key} history-substring-search-up
-for key ('j') bindkey -M vicmd ${key} history-substring-search-down
+# shellcheck disable=SC2154,SC3054
+for key in '^[[A' '^P' "${terminfo[kcuu1]}"; do
+  bindkey "${key}" history-substring-search-up
+done
+for key in '^[[B' '^N' "${terminfo[kcud1]}"; do
+  bindkey "${key}" history-substring-search-down
+done
+for key in 'k'; do
+  bindkey -M vicmd "${key}" history-substring-search-up
+done
+for key in 'j'; do
+  bindkey -M vicmd "${key}" history-substring-search-down
+done
+# shellcheck enable=SC2154
 unset key
 # }}} End configuration added by Zim Framework install
 
