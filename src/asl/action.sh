@@ -2,10 +2,8 @@
 # action.sh - minimal and direct: import `rich` and use `ask` (no fallbacks)
 
 MODDIR=${0%/*}
-
-# Ensure kamfw helpers are available (we require them — no fallback)
-[ -f "$MODDIR/lib/kamfw/.kamfwrc" ] || { echo '! File "kamfw/.kamfwrc" does not exist!'; exit 1; }
-. "$MODDIR/lib/kamfw/.kamfwrc"
+[ -f "$MODDIR/lib/kamfw/.kamfwrc" ] && . "$MODDIR/lib/kamfw/.kamfwrc" || abort '! File "kamfw/.kamfwrc" does not exist!'
+import __runtime__
 
 # Import rich to get `ask` / `guide`
 import rich

@@ -26,6 +26,12 @@ import i18n
 import lang
 import rich
 
+require_app "com.termux" \ # app
+    "termux not found!" \  # err
+    "url https://f-droid.org/en/packages/com.termux/"
+    # if err:
+    #  launch url "https://f-droid.org/en/packages/com.termux/"
+
 # 任务一：模块使用指南
 set_i18n "USAGE_GUIDE" \
     "zh" "快速开始 / Quick start
@@ -92,7 +98,6 @@ print "$(i18n "INSTALL_START")"
 
 newline 1
 
-# apply permissions where relevant (non-destructive - only if files exist)
 print "$(i18n "PERM_FIX")"
 
 # Ensure main binary permission is strict
