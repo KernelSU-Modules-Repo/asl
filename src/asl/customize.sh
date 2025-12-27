@@ -33,87 +33,31 @@ require_app "com.termux" \ # app
     #  launch url "https://f-droid.org/en/packages/com.termux/"
 
 # 任务一：模块使用指南
+# 使用 \n 代替物理换行，保持脚本逻辑紧凑
 set_i18n "USAGE_GUIDE" \
-    "zh" "快速开始 / Quick start
+    "zh" "快速开始 / Quick start${NL}1. 安装 Termux${NL}2. 运行: su -c rurima${NL}3. 检查依赖: dep${NL}4. 拉取镜像: pull alpine:edge ./alpine${NL}注意: 卸载需执行 chattr -i ./alpine/.rurienv" \
+    "en" "Quick Start / 快速开始${NL}1. Install Termux${NL}2. Run: su -c rurima${NL}3. Check deps: dep${NL}4. Pull image: pull alpine:edge ./alpine${NL}Note: Run 'chattr -i ./alpine/.rurienv' to uninstall." \
+    "ja" "クイックスタート${NL}1. Termuxをインストール${NL}2. 実行: su -c rurima${NL}3. 依存関係チェック: dep${NL}4. イメージ取得: pull alpine:edge ./alpine${NL}注: アンインストール前に 'chattr -i ./alpine/.rurienv' を実行してください。" \
+    "ru" "Быстрый старт${NL}1. Установите Termux${NL}2. Запуск: su -c rurima${NL}3. Проверка зависимостей: dep${NL}4. Загрузка образа: pull alpine:edge ./alpine${NL}Прим.: Для удаления выполните 'chattr -i ./alpine/.rurienv'."
 
-下载与安装
-下载发行版: https://github.com/KernelSU-Modules-Repo/asl/releases
 
-安装 Termux（如果未安装）
-
-运行：
-
-su
-rurima
-
-dep # 检查依赖
-pull # 拉取镜像
-
-示例：
-
-cd /data
-mkdir asl && cd asl
-使用镜像站: https://images.linuxcontainers.org/
-pull alpine:edge ./alpine
-run ./alpine
-
-注意：
-修改 /etc/resolv.conf（要删除旧文件并创建新文件，你可以使用 MT Manager 或其它工具，或使用命令行）
-写入 DNS 服务器配置，之后即可访问互联网。
-
-如何卸载？
-./alpine/.rurienv 已被设置为不可修改属性；使用 chattr -i ./alpine/.rurienv 移除此属性。" \
-    "en" "Quick start / 快速开始
-
-Download & install
-Download releases: https://github.com/KernelSU-Modules-Repo/asl/releases
-
-Install Termux (if not installed)
-
-Run:
-
-su
-rurima
-
-dep # check dependencies
-pull # pull image
-
-Example:
-
-cd /data
-mkdir asl && cd asl
-# Use images from: https://images.linuxcontainers.org/
-pull alpine:edge ./alpine
-run ./alpine
-
-Note:
-Modify /etc/resolv.conf (To remove old files and create new ones, you can use MT Manager or other tools, or do it via the command line.)
-Write DNS server configuration and you will now be able to access the internet.
-
-How do I uninstall it?
-./alpine/.rurienv It has been set to an unmodifiable attribute; remove it using chattr -i ./alpine/.rurienv."
-
-divider "#"
+divider "#" 25
 print "$(i18n "INSTALL_START")"
 
 newline 1
 
 print "$(i18n "PERM_FIX")"
 
-# Ensure main binary permission is strict
-if [ -f "$MODPATH/system/xbin/rurima" ]; then
-    set_perm "$MODPATH/system/xbin/rurima" root root 700
-    print "  $(i18n 'PERM_SET_FILE') system/xbin/rurima"
-fi
-
-divider "#"
+divider "#" 25
 
 # Print end-user usage guide (detailed)
 print "$(i18n "USAGE_GUIDE")"
 
-# import launcher
 
-# launch url "https://github.com/UserName/repo"
+
+import launcher
+
+launch url "https://github.com/KernelSU-Modules-Repo/asl"
 # launch ...
 
 # import rich --> 这里有更多，比如 ask函数 confirm函数
