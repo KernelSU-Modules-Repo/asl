@@ -25,6 +25,7 @@ import __customize__
 import i18n
 import lang
 import rich
+import app
 
 require_app "com.termuxx" \ # app
     "termux not found!" \  # err
