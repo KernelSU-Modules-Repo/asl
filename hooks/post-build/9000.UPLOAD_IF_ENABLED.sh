@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# shellcheck source=../lib/utils.sh
+# shellcheck source=Kam/KamHooks/lib/utils.sh
 . "$KAM_HOOKS_ROOT/lib/utils.sh"
 
 # If release disabled, skip
@@ -19,6 +21,7 @@ DIST="${KAM_DIST_DIR:-${KAM_PROJECT_ROOT:-$PWD}/dist}"
 
 # Build a simple release notes file (temporary)
 TMP_CHANGELOG=$(mktemp)
+# shellcheck disable=2329
 cleanup_tmp() {
     if [ -n "$TMP_CHANGELOG" ] && [ -f "$TMP_CHANGELOG" ]; then
         rm -f "$TMP_CHANGELOG"
@@ -58,10 +61,54 @@ Built with [Kam](https://github.com/MemDeco-WG/Kam)
 EOF
 )
 printf "%s\n" "$RELEASE_NOTES" > "$TMP_CHANGELOG"
+log_info "打包以下文件：$(ls -1 "$DIST")"
+# Decide which repository to use for the release.
+# Priority:
+# 1. GITHUB_REPOSITORY (set in GitHub Actions) - preferred when present
+# 2. KAM_RELEASE_REPO (explicit override)
+# 3. derive from git remote of the project (KAM_PROJECT_ROOT or $PWD)
+REPO=""
+REPO_SOURCE=""
+if [ -n "${GITHUB_REPOSITORY:-}" ]; then
+    REPO="$GITHUB_REPOSITORY"
+    REPO_SOURCE="GITHUB_REPOSITORY"
+elif [ -n "${KAM_RELEASE_REPO:-}" ]; then
+    REPO="$KAM_RELEASE_REPO"
+    REPO_SOURCE="KAM_RELEASE_REPO"
+else
+    if command -v git >/dev/null 2>&1; then
+        CHECK_DIR="${KAM_PROJECT_ROOT:-$PWD}"
+        REMOTE_URL=$(git -C "$CHECK_DIR" remote get-url origin 2>/dev/null || true)
+        if [ -n "$REMOTE_URL" ]; then
+            # Normalize: strip trailing .git and any trailing slash
+            REMOTE_URL=${REMOTE_URL%.git}
+            REMOTE_URL=${REMOTE_URL%/}
+            # Try to capture the last two path components (owner/repo)
+            if [[ "$REMOTE_URL" =~ ([^/]+/[^/]+)$ ]]; then
+                REPO="${BASH_REMATCH[1]}"
+            else
+                # Fallback: strip protocol/host or ssh prefix then capture last two components
+                PATH_PART=$(echo "$REMOTE_URL" | sed -E 's#^[^:]+:[/]*##; s#^[^/]+://[^/]+/##')
+                if [[ "$PATH_PART" =~ ([^/]+/[^/]+)$ ]]; then
+                    REPO="${BASH_REMATCH[1]}"
+                fi
+            fi
+            REPO_SOURCE="git remote (origin)"
+        fi
+    fi
+fi
 
-# Check if release already exists
-if gh release view "$TAG" >/dev/null 2>&1; then
-    log_error "Release $TAG already exists and is immutable, cannot proceed"
+# Fail safely if repository can't be determined (avoid uploading to the wrong repo)
+if [ -z "$REPO" ]; then
+    log_error "Could not determine target repository for release. Set GITHUB_REPOSITORY or KAM_RELEASE_REPO."
+    exit 1
+fi
+
+log_info "Using repository '$REPO' for release (source: $REPO_SOURCE)"
+
+# Check if release already exists in target repo
+if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
+    log_error "Release $TAG already exists in $REPO and is immutable, cannot proceed"
     exit 1
 fi
 
@@ -71,11 +118,24 @@ if [ "${KAM_PRE_RELEASE:-0}" = "1" ]; then
     PRE_FLAG="--prerelease"
 fi
 if [ -d "$DIST" ] && [ "$(ls -A "$DIST")" ]; then
-    log_info "Creating GitHub release $TAG and uploading assets from $DIST"
-    gh release create "$TAG" --title "${KAM_MODULE_ID}-${KAM_MODULE_VERSION_CODE}-${KAM_MODULE_VERSION}" --notes-file "$TMP_CHANGELOG" $PRE_FLAG "$DIST"/* || { log_error "Failed to create release $TAG and upload assets"; exit 1; }
+    log_info "Creating GitHub release $TAG and uploading assets from $DIST to $REPO"
+    assets=("$DIST"/*)
+    # Build arguments in an array so $PRE_FLAG (when empty) doesn't expand into an extra empty param
+    gh_args=("$TAG" "--repo" "$REPO" "--title" "${KAM_MODULE_ID}-${KAM_MODULE_VERSION_CODE}-${KAM_MODULE_VERSION}" "--notes-file" "$TMP_CHANGELOG")
+    if [ -n "$PRE_FLAG" ]; then
+        gh_args+=("$PRE_FLAG")
+    fi
+    gh_args+=("${assets[@]}")
+    if ! gh release create "${gh_args[@]}"; then
+        log_error "Failed to create release $TAG and upload assets to $REPO"
+        exit 1
+    fi
 else
     log_warn "Dist directory not found or empty: $DIST"
 fi
 
 log_success "Upload step finished"
 exit 0
+
+# No automatic git commit/push in this hook.
+# If updating the repository is required, perform that explicitly outside this upload step.
