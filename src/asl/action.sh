@@ -52,5 +52,4 @@ ask "TOGGLE_RURIMARC" \
         "REFUSE" \
             'exit 0' \
         1
-
 exit 0

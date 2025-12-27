@@ -55,8 +55,6 @@ divider "#" 25
 # Print end-user usage guide (detailed)
 print "$(i18n "USAGE_GUIDE")"
 
-
-
 launch url "https://github.com/KernelSU-Modules-Repo/asl"
 # launch ...
 
