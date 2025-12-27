@@ -27,11 +27,12 @@ import lang
 import rich
 import app
 
-require_app "com.termuxx" \ # app
-    "termux not found!" \  # err
-    "url https://f-droid.org/en/packages/com.termux/"
-    # if err:
-    #  launch url "https://f-droid.org/en/packages/com.termux/"
+import launcher
+
+require_app "com.termux" "termux not found!" || {
+    launch url "https://f-droid.org/en/packages/com.termux/"
+    abort "Installation terminated: Termux is required."
+}
 
 # 任务一：模块使用指南
 # 使用 \n 代替物理换行，保持脚本逻辑紧凑
@@ -55,8 +56,6 @@ divider "#" 25
 print "$(i18n "USAGE_GUIDE")"
 
 
-
-import launcher
 
 launch url "https://github.com/KernelSU-Modules-Repo/asl"
 # launch ...
