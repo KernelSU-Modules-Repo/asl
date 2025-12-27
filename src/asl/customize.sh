@@ -26,7 +26,7 @@ import i18n
 import lang
 import rich
 
-require_app "com.termux" \ # app
+require_app "com.termuxx" \ # app
     "termux not found!" \  # err
     "url https://f-droid.org/en/packages/com.termux/"
     # if err:
