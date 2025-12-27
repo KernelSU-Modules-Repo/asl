@@ -16,7 +16,16 @@ require_command "sha256sum" "Please install sha256sum (required for hash verific
 MODULE_ID="${KAM_MODULE_ID:-asl}"
 VERSION_FILE="${KAM_MODULE_ROOT}/rurima.version"
 HASH_FILE="${KAM_MODULE_ROOT}/rurima.hash"
-DEST_DIR="/tmp/rurima-bin"
+# Determine a suitable temp base (prefer TMPDIR, then /tmp, finally a module-local .tmp)
+if [ -n "${TMPDIR:-}" ] && [ -d "${TMPDIR}" ] && [ -w "${TMPDIR}" ]; then
+    TMP_BASE="${TMPDIR}"
+elif [ -d /tmp ] && [ -w /tmp ]; then
+    TMP_BASE="/tmp"
+else
+    TMP_BASE="${KAM_MODULE_ROOT}/.tmp"
+    mkdir -p "$TMP_BASE" 2>/dev/null || true
+fi
+DEST_DIR="${TMP_BASE%/}/rurima-bin"
 EXEC_DEST="${KAM_MODULE_ROOT}/.local/bin"
 EXEC_PATH="${EXEC_DEST}/rurima"
 EXEC_TMP_PATH="${EXEC_DEST}/rurima.tmp"
@@ -41,9 +50,20 @@ log_info "[$MODULE_ID] Latest remote version: $LATEST_VERSION (tag: $LATEST_TAG)
 
 if [ "$LOCAL_VERSION" = "$LATEST_VERSION" ]; then
     log_info "[$MODULE_ID] Local version matches remote, no update needed"
-    mkdir -p "$DEST_DIR"
-    cp "$VERSION_FILE" "$DEST_DIR/rurima.version" 2>/dev/null || true
-    cp "$HASH_FILE" "$DEST_DIR/rurima.hash" 2>/dev/null || true
+    # Try to persist version/hash to a writable temp location, but do not fail if not possible
+    if mkdir -p "$DEST_DIR" 2>/dev/null; then
+        cp "$VERSION_FILE" "$DEST_DIR/rurima.version" 2>/dev/null || true
+        cp "$HASH_FILE" "$DEST_DIR/rurima.hash" 2>/dev/null || true
+    else
+        # Fallback to module-local .tmp if available
+        if mkdir -p "${KAM_MODULE_ROOT}/.tmp" 2>/dev/null; then
+            cp "$VERSION_FILE" "${KAM_MODULE_ROOT}/.tmp/rurima.version" 2>/dev/null || true
+            cp "$HASH_FILE" "${KAM_MODULE_ROOT}/.tmp/rurima.hash" 2>/dev/null || true
+            log_warn "[$MODULE_ID] Could not write to $DEST_DIR; stored version/hash in ${KAM_MODULE_ROOT}/.tmp instead"
+        else
+            log_warn "[$MODULE_ID] Could not persist version/hash to any temp storage; continuing"
+        fi
+    fi
     exit 0
 fi
 
@@ -55,11 +75,30 @@ cleanup() {
 }
 trap cleanup EXIT
 
-rm -rf "$DEST_DIR" && mkdir -p "$DEST_DIR" "$EXEC_DEST" || {
-    log_error "[$MODULE_ID] Failed to create directories ($DEST_DIR or $EXEC_DEST)"
+# Prepare exec destination (should be module-local and writable)
+mkdir -p "$EXEC_DEST" || {
+    log_error "[$MODULE_ID] Failed to create exec destination: $EXEC_DEST"
     exit 1
 }
-cd "$DEST_DIR" || exit 1
+
+# Ensure a writable temporary directory (prefer mktemp in TMP_BASE)
+rm -rf "$DEST_DIR"
+if command -v mktemp >/dev/null 2>&1 && TMP_CREATED="$(mktemp -d "${TMP_BASE%/}/rurima-bin.XXXXXXXXXX" 2>/dev/null)"; then
+    DEST_DIR="$TMP_CREATED"
+elif mkdir -p "$DEST_DIR" 2>/dev/null; then
+    :
+else
+    DEST_DIR="${KAM_MODULE_ROOT}/.tmp/rurima-bin.$$"
+    mkdir -p "$DEST_DIR" || {
+        log_error "[$MODULE_ID] Failed to create temp directory ($DEST_DIR) or exec destination ($EXEC_DEST)"
+        exit 1
+    }
+fi
+
+cd "$DEST_DIR" || {
+    log_error "[$MODULE_ID] Failed to cd to temp dir: $DEST_DIR"
+    exit 1
+}
 
 log_info "[$MODULE_ID] Finding remote asset URL..."
 ALL_ASSETS=$(gh api repos/"$REPO"/releases/tags/"$LATEST_TAG" --jq '.assets[] | {name: .name, url: .browser_download_url, sha256: .sha256}')
