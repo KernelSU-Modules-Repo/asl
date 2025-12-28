@@ -33,10 +33,10 @@ require_app "com.termux" "termux not found!" || {
 # 任务一：模块使用指南
 # 使用 \n 代替物理换行，保持脚本逻辑紧凑
 set_i18n "USAGE_GUIDE" \
-    "zh" "快速开始 / Quick start${NL}1. 安装 Termux${NL}2. 运行: su -c rurima${NL}3. 检查依赖: dep${NL}4. 拉取镜像: pull alpine:edge ./alpine${NL}注意: 卸载需执行 chattr -i ./alpine/.rurienv" \
-    "en" "Quick Start / 快速开始${NL}1. Install Termux${NL}2. Run: su -c rurima${NL}3. Check deps: dep${NL}4. Pull image: pull alpine:edge ./alpine${NL}Note: Run 'chattr -i ./alpine/.rurienv' to uninstall." \
-    "ja" "クイックスタート${NL}1. Termuxをインストール${NL}2. 実行: su -c rurima${NL}3. 依存関係チェック: dep${NL}4. イメージ取得: pull alpine:edge ./alpine${NL}注: アンインストール前に 'chattr -i ./alpine/.rurienv' を実行してください。" \
-    "ru" "Быстрый старт${NL}1. Установите Termux${NL}2. Запуск: su -c rurima${NL}3. Проверка зависимостей: dep${NL}4. Загрузка образа: pull alpine:edge ./alpine${NL}Прим.: Для удаления выполните 'chattr -i ./alpine/.rurienv'."
+    "zh" "快速开始 / Quick start${NL}1. 安装 Termux${NL}2. 运行: su -c rurima${NL}3. 检查依赖:rurima dep${NL}4. 拉取镜像:rurima pull alpine:edge ./alpine${NL}注意: 卸载需执行 chattr -i ./alpine/.rurienv" \
+    "en" "Quick Start / 快速开始${NL}1. Install Termux${NL}2. Run: su -c rurima${NL}3. Check deps:rurima dep${NL}4. Pull image:rurima pull alpine:edge ./alpine${NL}Note: Run 'chattr -i ./alpine/.rurienv' to uninstall." \
+    "ja" "クイックスタート${NL}1. Termuxをインストール${NL}2. 実行: su -c rurima${NL}3. 依存関係チェック:rurima dep${NL}4. イメージ取得:rurima pull alpine:edge ./alpine${NL}注: アンインストール前に 'chattr -i ./alpine/.rurienv' を実行してください。" \
+    "ru" "Быстрый старт${NL}1. Установите Termux${NL}2. Запуск: su -c rurima${NL}3. Проверка зависимостей:rurima dep${NL}4. Загрузка образа:rurima pull alpine:edge ./alpine${NL}Прим.: Для удаления выполните 'chattr -i ./alpine/.rurienv'."
 
 divider "#" 25
 print "$(i18n "INSTALL_START")"
