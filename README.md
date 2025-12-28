@@ -76,11 +76,9 @@ Quick start / 快速开始
 
 - rurima
 
-- # su -c rurima
+- rurima dep # check dependencies
 
-- dep # check dependencies
-
-- pull # pull image
+- rurima pull # pull image
 
 example
 
@@ -90,9 +88,9 @@ example
 
 - https://images.linuxcontainers.org/
 
-- pull alpine:edge ./alpine
+- rurima pull alpine:edge ./alpine
 
-- run ./alpine
+- rurima r ./alpine
 
 - note!
 
