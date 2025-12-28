@@ -1,2 +1,4 @@
 . "/data/adb/modules/asl/.rurima.env"
-exec "$SHELL" -i -- "$@"
+HOME_BAK=$HOME
+exec "$SHELL" -i "$@"
+export HOME=$HOME_BAK
