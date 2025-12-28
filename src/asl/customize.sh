@@ -1,5 +1,5 @@
 # shellcheck shell=ash
-# {{prop.name}} customize.sh
+# customize.sh
 #
 # ---------------------------------------------------------------------------------------
 # CUSTOM INSTALLATION LOGIC
