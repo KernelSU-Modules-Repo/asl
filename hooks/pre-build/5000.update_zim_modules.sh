@@ -13,5 +13,5 @@ if [ "$KAM_INTERACTIVE" = "1" ]; then
 else
     # 执行zimfw update
     log_info "Starting zimfw update"
-    $(which zsh) -c "source $HOME/.zshrc && which git && zimfw update && zimfw upgrade" || exit 0
+    $(which zsh) -c "source $HOME/.zshrc && which git && zimfw update && zimfw upgrade"
 fi
