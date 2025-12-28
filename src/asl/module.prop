@@ -1,7 +1,7 @@
 id=asl
 name=AndroidSubSystem4Linux
-version=v1.0.19
-versionCode=1766922541389
+version=v1.0.20
+versionCode=1766924672228
 author=LIghtJUNction
 description=Run GUN/Linux on android , powered by rurima & build-system: kam.
 updateJson=https://github.com/KernelSU-Modules-Repo/releases/latest/download/asl.zip
