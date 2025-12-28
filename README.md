@@ -6,6 +6,10 @@
 # ![Screenshot](Screenshot_2025-12-08-01-18-25-97_84d3000e3f4017145260f7618db1d683.jpg)
 
 ---
+# Note
+- 出于简洁性考虑，最新版本已经不再内置zsh zim框架 并强制依赖于termux
+
+---
 How to build & install？ / 如何下载 & 安装？
 ============================================
 - Termux :
@@ -37,7 +41,8 @@ How to build & install？ / 如何下载 & 安装？
 What is this? / 这是干什么的？
 ============================================
 
-这是一个来自 asl 的 fork（实际上改的不像样子了，逻辑上比原模块简单不少，体积大幅减少，因为依赖了termux） — 文档聚焦于 Kam 的构建钩子系统（hooks）。  
+这是一个来自 asl 的 fork（实际上改的不像样子了，逻辑上比原模块简单~~不少~~，体积大幅减少，因为依赖了termux）
+                            — 文档聚焦于 Kam 的构建钩子系统（hooks）。  
 
 This is a fork from asl (actually quite different from the original, logically much simpler than the original module, and significantly smaller in size, because it depends on termux) — the documentation focuses on Kam's build hook system.  
 
@@ -59,9 +64,6 @@ Developer private key obtained from the developers repository
 - The signature file has the .sig extension and can be verified with my public key.
 
 
-
-
-
 Quick start / 快速开始
 --------------------------------------------
 
@@ -73,6 +75,8 @@ Quick start / 快速开始
 - su
 
 - rurima
+
+- # su -c rurima
 
 - dep # check dependencies
 
@@ -117,8 +121,6 @@ This module is unlikely to cause a boot loop, and its content is 100% manually e
 ### Action secrets / GitHub Actions（CI）
 - `KAM_PRIVATE_KEY`: Add this secret (PEM content) to your repository to enable CI signing.
 - Keep secrets secure — do not commit private keys to the repository.
-
-
 
 Overview / 概述
 --------------------------------------------

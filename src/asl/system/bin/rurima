@@ -1,10 +1,2 @@
-export HOME=/data/adb/modules/asl/
-export SHELL=${HOME}.local/bin/zsh
-
-. "${HOME}.rurima.env"
-
-# 抑制潜在的死循环
-if [ ! $ASL ]; then
-
-    exec ${HOME}.local/bin/zsh -i "$@"
-fi
+. "/data/adb/modules/asl/.rurima.env"
+exec "$SHELL" -i -- "$@"

@@ -14,16 +14,8 @@
 # 详见 lib/kamfw/magisk.sh
 # lib/kamfw/ksu.sh
 # lib/kamfw/ap.sh
-# 依赖控制,文件共享
-# 自动提取模块.local到kam共享目录，采用硬链接方式
-# 为保证模块卸载时候不会有残留文件，uninstall.sh文件不要删
-import __customize__
 
-# Define NL variable if not already defined
-NL="${NL:-'
-'}"
-# --> .local/bin ~~> /data/adb/kam/bin
-# --> .local/lib ~~> /data/adb/kam/lib
+import __customize__
 
 # i18n
 import i18n
@@ -45,7 +37,6 @@ set_i18n "USAGE_GUIDE" \
     "en" "Quick Start / 快速开始${NL}1. Install Termux${NL}2. Run: su -c rurima${NL}3. Check deps: dep${NL}4. Pull image: pull alpine:edge ./alpine${NL}Note: Run 'chattr -i ./alpine/.rurienv' to uninstall." \
     "ja" "クイックスタート${NL}1. Termuxをインストール${NL}2. 実行: su -c rurima${NL}3. 依存関係チェック: dep${NL}4. イメージ取得: pull alpine:edge ./alpine${NL}注: アンインストール前に 'chattr -i ./alpine/.rurienv' を実行してください。" \
     "ru" "Быстрый старт${NL}1. Установите Termux${NL}2. Запуск: su -c rurima${NL}3. Проверка зависимостей: dep${NL}4. Загрузка образа: pull alpine:edge ./alpine${NL}Прим.: Для удаления выполните 'chattr -i ./alpine/.rurienv'."
-
 
 divider "#" 25
 print "$(i18n "INSTALL_START")"
