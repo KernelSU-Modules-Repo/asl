@@ -2,7 +2,7 @@
 #
 # This is not sourced during shell startup and is only used to configure zimfw.
 #
-
+zstyle ':zim:zmodule' use 'degit'
 #
 # Modules
 #
